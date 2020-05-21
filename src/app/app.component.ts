@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AppService } from "./app-service";
 
 @Component({
   selector: 'app-root',
@@ -7,81 +8,46 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'todo';
-  title = 'app';
-  // data={};
-  datas=[];
-  users=[];
-  name = "";
-  job = "";
-  message: any;
-  // newUsers={};
+  userId = "1";
+  datas = [];
+  todos = [];
+  constructor(private appService: AppService) { }
 
-  constructor(private appService: AppService) {}
-  
-  onClickGet(){
-    // console.log("Get request send........");
-      this.appService.getUser().subscribe(data =>{
-        console.log("Get Response   : "+JSON.stringify(data));
-        if(data.data){
-          this.datas = data.data;
-        }
-        // this.datas = data.data;
-    
-
-
-    });
-  }
-  onPostCall(){
-    console.log("user :  " +this.name);
-    console.log("job :  " +this.job);
-    let data1={
-      "name":this.name,
-      "job":this.job
-    }
-    this.appService.addUser(data1)
-  .subscribe((user) => {
-    console.log("Status code  : "+JSON.stringify(user) )
-      this.users.push(user)
-    });
-    this.name="";
-    this.job="";
-  }
-
-  onDeleteCall(){
-    this.appService.deleteUser().subscribe(response=>{
-      console.log("Delete Response>>>>"+JSON.stringify(response));
+  onClickGet() {
+    this.appService.getTodo().subscribe(data => {
+      console.log("Get Response   : " + JSON.stringify(data));
+      if (data.data) {
+        this.datas = data.data;
+      }
     });
   }
 
-  onPutCall(){
-    console.log("user :  " +this.name);
-    console.log("job :  " +this.job);
-    let data1={
-      name:this.name,
-      job:this.job
+
+  onPostCall() {
+    let data1 = {
+      "userId": this.userId,
+      "title": this.title
     }
-    this.appService.updateUser(data1)
-  .subscribe(hero => {this.users.push(hero);console.log("update call >>> "+JSON.stringify(hero))});
-  this.name="";
-  this.job="";
+    this.appService.addTodo(data1)
+      .subscribe((res) => {
+        console.log("Status code  : " + JSON.stringify(res))
+        this.todos.push(res)
+      });
   }
 
-getWeek(){
-  
-  let week=this.appService.getWeek();
-  this.week=week
-  for(let i=0;i<this.week.length;i++){
-   
-    console.log("week>>>"+this.week[i])
-    if(this.week[i] === "Wednesday")
-    {
-      console.log("wedneday>>>" + this.week[i]);
-      break;
-    }
+  onDeleteCall() {
+    this.appService.deleteTodo().subscribe(response => {
+      console.log("Delete Response>>>>" + JSON.stringify(response));
+    });
   }
-  // this.week.forEach(element=>{
 
-  // })
-  console.log("weeks>>>>",week)
-}
+  onPutCall() {
+    let data1 = {
+      userId: this.userId,
+      title: this.title
+    }
+    this.appService.updateTodo(data1)
+      .subscribe(res => { this.todos.push(res); console.log("update call >>> " + JSON.stringify(res)) });
+  }
+
 }
