@@ -11,7 +11,7 @@ export class AppService {
   ) {}
    headers = new Headers({ 'Content-Type': 'application/json' });
    options = new RequestOptions({ headers: this.headers });
-   
+
   getTodo() {
     return this.http.get('https://jsonplaceholder.typicode.com/posts').map((res:Response) =>{
                       console.log("Status : "+res.status)
@@ -25,13 +25,13 @@ export class AppService {
                     });
   }
   deleteTodo() {
-   return this.http.delete('https://reqres.in/api/users/2', this.options).map((res: Response) =>{ 
+   return this.http.delete('https://jsonplaceholder.typicode.com/posts/1', this.options).map((res: Response) =>{ 
                        console.log("status   : "+res.status)
                        return res.json()
    });
       }
   updateTodo(todo){
-    return this.http.put('https://reqres.in/api/users/2',todo, this.options).map((res: Response) =>{ 
+    return this.http.put('https://jsonplaceholder.typicode.com/posts/1',todo, this.options).map((res: Response) =>{ 
                         console.log("status   : "+res.status)
                         return res.json()
    });
